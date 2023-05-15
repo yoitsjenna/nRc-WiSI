@@ -1,4 +1,4 @@
-**Welcome the nRc-WiS R coding group!**
+**Welcome the nRc-WiSI R coding group!**
 
 Welcome! This initiative began as a way to share, teach, and learn about R and RStudio within the Women in Science & Innovation group at NRC. We encourage anyone who wants to learn basic coding to join in our sessions, regardless of skill-level! We will begin with a few introductory classes to get new users started, then we will dive into a diverse group of more challenging topics. If you ever have questions throughout the sessions, please use the chat; since we a group of three planning the sessions, two people will always be monitoring the chat to help. The sessions will be in English, but please feel free to ask questions in French in the chat. 
 
