@@ -37,7 +37,7 @@ Almost all functions in R are lower case
 
 **"Code tools" button** --> comment/uncomment lines of code
 **Environment tab** --> clear environment (broom)
-**History tab **--> clear history (broom)
+**History tab**--> clear history (broom)
 **Files tab** --> shows all of the files that are in the directory you have selected
 **Plots tab** --> any time you run code that results in a plot, it will appear here
 **Packages** --> Install and load packages, or click on a specific package to learn more about what is included in that package
