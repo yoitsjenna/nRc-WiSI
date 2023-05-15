@@ -1,4 +1,7 @@
-**Welcome the nRc R coding group!**
+**Welcome the nRc-WiS R coding group!**
+
+R is an open-source software environment and programming language providing a wide range of statistical and graphical techniques for data analysis, data manipulation, modeling, and visualization. RStudio is a user-friendly integrated development environment (IDE) for working with the R programming language. 
+
 
 To download the scripts and datasets for each session, click the green "Code" button and download the files as zip files. Please use a browser other than Internet Explorer (i.e. Firefox, Microsoft Edge, etc.).
 Unzip the files from your "Downloads" section on your computer, then move the files to the folder you will be using as your working directory. 
