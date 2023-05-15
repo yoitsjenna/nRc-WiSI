@@ -1,7 +1,16 @@
 **Welcome the nRc-WiS R coding group!**
 
+Welcome! This initiative began as a way to share, teach, and learn about R and RStudio within the Women in Science & Innovation group at NRC. We encourage anyone who wants to learn basic coding to join in our sessions, regardless of skill-level! We will begin with a few introductory classes to get new users started, then we will dive into a diverse group of more challenging topics. Although the sessions will be in English, please feel free to ask questions in French. 
+
 R is an open-source software environment and programming language providing a wide range of statistical and graphical techniques for data analysis, data manipulation, modeling, and visualization. RStudio is a user-friendly integrated development environment (IDE) for working with the R programming language. 
 
+Ideally, you will need to download/install BOTH R and R Studio. Depending on your IT access, you may need to put in a ticket for the installation of these on your NRC computer. Make sure you ask for R AND RStudio. 
+
+To download/install R, download the program applicable to your operating system. 
+- https://cran.r-project.org/
+
+To download/install RStudio, download the program applicable to your operating system. The free, open-source is the one that we will be using. 
+- https://posit.co/downloads/
 
 To download the scripts and datasets for each session, click the green "Code" button and download the files as zip files. Please use a browser other than Internet Explorer (i.e. Firefox, Microsoft Edge, etc.).
 Unzip the files from your "Downloads" section on your computer, then move the files to the folder you will be using as your working directory. 
