@@ -7,7 +7,7 @@ To download the scripts and datasets for each session, click the green "Code" bu
 Top left (Source): Where you write and edit scripts
 Top right (Environment & History): Where you see objects and variables
 Bottom left (Console): Where you see the results of running a script
-Bottom right (Files, Plots, Packages, Help): Where you see files in the working directory, resulting plots,and packages to load
+Bottom right (Files, Plots, Packages, Help): Where you see files in the working directory, resulting plots, and packages to load
 These sections are adjustable by hovering cursor on the boundaries of each section and dragging to adjust
 
 **Start a new project**
