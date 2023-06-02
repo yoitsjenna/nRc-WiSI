@@ -3,6 +3,7 @@ Graphics & Colours
 - https://www.w3schools.com/colors/colors_picker.asp
 - https://www.rapidtables.com/web/color/html-color-codes.html
 - https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf
+- https://r4ds.had.co.nz/data-visualisation.html
 
 
 Introduction to R
