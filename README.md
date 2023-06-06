@@ -64,3 +64,21 @@ By creating a "project" and working within a "project", it automatically sets th
 - In the top bar, click "Tools". Select "Global Options", then "Appearance" and play around with the RStudio Theme and Editor theme.
 
 R prefers to read CSV files, not regular excel files. So you will notice today, all the spreadsheets we will be working with are in CSV format.
+
+Graphics & Colours
+- https://r-graph-gallery.com/
+- https://www.w3schools.com/colors/colors_picker.asp
+- https://www.rapidtables.com/web/color/html-color-codes.html
+- https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf
+- https://r4ds.had.co.nz/data-visualisation.html
+
+Introduction to R
+- https://cran.r-project.org/
+- https://datacarpentry.org/R-genomics/01-intro-to-R.html
+- http://www.cookbook-r.com/
+
+Tidyverse
+- https://www.youtube.com/watch?v=8NnKhpG4JHA
+
+R Cheatsheets
+- https://www.rstudio.com/resources/cheatsheets/
