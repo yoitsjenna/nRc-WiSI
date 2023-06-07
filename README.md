@@ -71,6 +71,7 @@ R prefers to read CSV files, not regular excel files. So you will notice today, 
 - https://www.rapidtables.com/web/color/html-color-codes.html
 - https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf
 - https://r4ds.had.co.nz/data-visualisation.html
+- https://github.com/asteves/tayloRswift
 
 **Introduction to R**
 - https://cran.r-project.org/
