@@ -58,7 +58,8 @@ By creating a "project" and working within a "project", it automatically sets th
 - Ctrl + Enter --> Run the current line of code
 - Ctrl + A + Enter --> Run all lines of code
 - Ctrl + Shift + C --> Comment or uncomment lines
-- Ctrl + Shift + M --> %>% (pipes) 
+- Ctrl + Shift + M --> %>% (pipes)
+- Alt +- --> assignment operator (<-)
 
 **How to change the appearance of R studio**
 - In the top bar, click "Tools". Select "Global Options", then "Appearance" and play around with the RStudio Theme and Editor theme.
