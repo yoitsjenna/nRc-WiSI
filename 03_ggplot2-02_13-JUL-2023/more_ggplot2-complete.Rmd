@@ -1,0 +1,215 @@
+---
+title: "Introduction to Data Visualization (Part 2)"
+author: "Reiko Okamoto"
+date: "2023-07-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+```
+
+## ❓ Course information
+
+-   *Mostly for those joining us for the first time*
+
+-   Course materials are available on [GitHub](https://github.com/yoitsjenna/nRc-WiSI)
+
+-   Lesson will be recorded and the recording will be shared on Teams
+
+-   Content will be delivered in English but participants can ask questions in the chat or by email in both official languages
+
+-   Request was submitted to Client Services Centre to make R and RStudio available on the Green zone
+
+    -   Alternatives to corporate machines: [Posit Cloud](https://posit.cloud/) or personal computer
+
+-   As always, consult your supervisor prior to using R and/or RStudio to develop data products as part of your work
+
+-   📣 indicates instructions and 💡 indicates tips
+
+## 📆 Upcoming schedule
+
+-   **Introduction to Data Wrangling** - Thursday, July 27th (12:00-13:00 ET)
+
+-   Teams meeting invite will be sent via email and posted on the R Learning Group sub-channel
+
+## ⏪ What did we discuss last time?
+
+-   [R Markdown](https://rmarkdown.rstudio.com/) is a file format for making dynamic documents with R that combine code, its results, and narrative text
+
+-   [ggplot2](https://ggplot2.tidyverse.org/) is a data visualization package for declaratively creating graphics
+
+-   Creating a ggplot2 object is like building a layered cake 🍰, adding components with `+`
+
+    ![](template.PNG){width="500"}
+
+-   Plot types we covered: histogram, scatter plot, line plot, bar plot
+
+## 🔮 Clarifying concepts from last time
+
+-   *What is the difference between editing in source and visual mode?*
+
+    -   In source mode, you need to "knit" each time you make a change to see what your document looks like
+
+    -   Visual mode provides a better experience when working with .md or .Rmd files because you can see changes in real-time and preview your document without re-knitting (more like editing in Microsoft Word)
+
+    -   Visual mode supports both traditional keyboard shortcuts as well as markdown shortcuts; no need to memorize markdown syntax
+
+    -   Better experience for people who are not familiar with markdown yet or prefer not writing in markdown, but still want to use its features
+
+-   *When do we want to use the pipe?*
+
+    -   The [tidyverse style guide](Use%20%%3E%%20to%20emphasise%20a%20sequence%20of%20actions,%20rather%20than%20the%20object%20that%20the%20actions%20are%20being%20performed%20on.) suggests "[using] `%>%` to emphasize a sequence of actions, rather than the object that the actions are being performed on"
+
+```{r pipe-demo}
+# with pipe
+starwars |> 
+  filter(homeworld == "Tatooine") |> 
+  group_by(species) |> 
+  summarise(h = mean(height))
+
+# without pipe
+summarise(group_by(filter(starwars, homeworld == "Tatooine"), species), h = mean(height))
+```
+
+-   *What are the differences between the magrittr pipe (`&>%`) and the base R pipe (`|>`)?*
+
+    -   [The magrittr and base R pipe: what's the difference? (CC241) - YouTube](https://www.youtube.com/watch?v=TmSwDAvPX2Q)
+
+    -   [Differences between the base R and magrittr pipes (tidyverse.org)](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
+
+## 🍽️ Le menu du jour
+
+-   Bar plots (continued)
+
+-   Changing colors
+
+-   Additional plots
+
+-   Changing the look and feel
+
+-   Saving our masterpieces
+
+## 📊 Bar plots (continued)
+
+📣 Read the data:
+
+```{r import-data}
+data <- readr::read_csv("french_trains.csv")
+
+data
+```
+
+💡 Each row summarizes information on trips from one station to another for a given month and year
+
+📣 Create a grouped bar plot to compare the number of departures from Paris-Nord in 2015 and 2016, by destination:
+
+```{r bar-plot}
+bar_plot <- data |> 
+  filter(departure_station == "PARIS NORD",
+         year %in% c(2015, 2016)) |> 
+  mutate(year = as.character(year)) |> 
+  summarise(n = sum(total_num_trips), .by = c(year, arrival_station)) |> 
+   ggplot(aes(x = arrival_station, y = n, fill = year)) +
+   geom_bar(stat="identity", position = "dodge")
+
+bar_plot
+```
+
+📣 Create a horizontal bar plot:
+
+```{r h-bar-plot}
+h_bar_plot <- bar_plot +
+  coord_flip() # flip cartesian coordinates
+
+h_bar_plot
+```
+
+## 🖌️Changing colors
+
+📣 Change colors manually:
+
+```{r change-fill-manual}
+bar_plot +
+  scale_fill_manual(values=c("#651C32", "#F2827F")) # SNCF visual identity 
+```
+
+📣 Change colors using the [RColorBrewer](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html) package:
+
+```{r change-fill-brewer}
+bar_plot +
+  scale_fill_brewer(palette = "Pastel1")
+```
+
+📣 An estimated 2.6 million Canadians are colorblind. Create a colorblind-friendly plot using the RColorBrewer package:
+
+```{r change-fill-colorblind}
+display.brewer.all()
+display.brewer.all(colorblindFriendly = TRUE)
+
+bar_plot +
+  scale_fill_brewer(palette = "Set2")
+```
+
+## 📈 Plots, plots, plots, plots, plots, plots
+
+📣 Create a box plot to show the distributions of the monthly number of trips from Paris-Gare-de-Lyon for each international destination:
+
+```{r box-plot}
+box_plot <- data |> 
+  filter(departure_station == "PARIS LYON",
+         service == "International") |> 
+  ggplot(aes(x = arrival_station, y = total_num_trips)) +
+  geom_boxplot()
+
+box_plot
+```
+
+📣 Change one line of code to visualize the distributions using a violin plot:
+
+```{r violin-plot}
+violin_plot <- data |> 
+  filter(departure_station == "PARIS LYON",
+         service == "International") |> 
+  ggplot(aes(x = arrival_station, y = total_num_trips)) +
+  geom_violin()
+
+violin_plot
+```
+
+> A violin plot is more informative than a plain box plot. While a box plot only shows summary statistics such as mean/median and interquartile ranges, the violin plot shows the full distribution of the data. The difference is particularly useful when the data distribution is multimodal (more than one peak).
+
+--- [Violin plot - Wikipedia](https://en.wikipedia.org/wiki/Violin_plot#:~:text=A%20violin%20plot%20is%20more,(more%20than%20one%20peak).)
+
+## 🖼️ Facets
+
+📣 Use facets to...
+
+```{r facet}
+data
+```
+
+## Changing the look and feel
+
+📣 Add text to provide additional information about the data being displayed:
+
+📣 Add direct labels to the line plot from last lesson:
+
+📣 Remove the legend from the line plot:
+
+📣 Force the y-axis to start at 0 and add year-month labels to the x-axis
+
+📣 Change elements that are specified in `theme()`
+
+📣 Apply pre-existing themes
+
+## 📚 Extra resources
+
+-   [From data to Viz \| Find the graphic you need (data-to-viz.com)](https://www.data-to-viz.com/)
+
+-   [Be Awesome in ggplot2: A Practical Guide to be Highly Effective - R software and data visualization - Easy Guides - Wiki - STHDA](http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization)
+
+-   [Exploring RStudio's Visual Markdown Editor - Posit](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/)

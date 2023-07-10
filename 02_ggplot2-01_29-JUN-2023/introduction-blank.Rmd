@@ -72,7 +72,7 @@ knitr::opts_chunk$set(echo = TRUE)
 -   When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r cars}
-# YOUR CODE HERE
+summary(cars)
 ```
 
 ## 🎨 Introduction to ggplot2 (1 min)
@@ -84,7 +84,7 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Load the packages we'll be using:
 
 ```{r load-package}
-# YOUR CODE HERE
+library(tidyverse)
 ```
 
 💡 You only need to install a package once, but you need to reload it every time you start a new session.
@@ -100,7 +100,9 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Read the data:
 
 ```{r import-data}
-# YOUR CODE HERE
+data <- readr::read_csv("french_trains.csv")
+
+data
 ```
 
 💡 readr is also part of the tidyverse; it provides a fast and user-friendly way to read rectangular text data. Rectangular data is a collection of variables (in columns) and observations (in rows).
@@ -122,7 +124,8 @@ knitr::opts_chunk$set(echo = TRUE)
 | `num_arriving_late`       | double    | Number of trains arriving late        |
 
 ```{r inspect-data}
-# YOUR CODE HERE
+head(data)
+tail(data)
 ```
 
 -   Each row summarizes information on trips from one station to another for a given month and year.
@@ -136,7 +139,9 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Create a histogram to visualize the distribution of average journey time (numeric):
 
 ```{r histogram}
-# YOUR CODE HERE
+data |> 
+  ggplot(aes(x = journey_time_avg)) +
+  geom_histogram(bins = 15)
 ```
 
 -   We can see that the distribution of average journey time is right-skewed.
@@ -148,7 +153,12 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Create a scatter plot to visualize the relationship between average journey time (numeric) and average arrival delay (numeric):
 
 ```{r scatter-plot}
-# YOUR CODE HERE
+sct_plt <- data |> 
+  dplyr::filter(avg_delay_all_arriving > 0) |>  
+  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
+  geom_point()
+
+sct_plt
 ```
 
 -   It looks as though the variance of delay increases as the average journey time increases. For journeys that average \<1 hour, arrival delays seem to be \<10 minutes. Meanwhile, for journeys that average 5 hours, arrival delays seem to be \<30 minutes.
@@ -156,13 +166,20 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Change the look and feel of the points:
 
 ```{r scatter-plot-aes}
-# YOUR CODE HERE
+data |> 
+  dplyr::filter(avg_delay_all_arriving > 0) |>  
+  ggplot(aes(x = journey_time_avg, y = avg_delay_all_arriving)) +
+  geom_point(size = 0.8)
 ```
 
 📣 Add title and change axis labels:
 
 ```{r change-labels}
-# YOUR CODE HERE
+sct_plt +
+  labs(title = "Average arrival delay vs. average journey time",
+       subtitle = "Jan. 2015 to Nov. 2018",
+       x = "Average journey time (min)",
+       y = "Average arrival delay (min)")
 ```
 
 ## 📈 Line plot (15 min)
@@ -176,7 +193,12 @@ knitr::opts_chunk$set(echo = TRUE)
 📣 Create a line plot to show how the monthly number of trips from Paris to Brest fluctuates throughout the year:
 
 ```{r line-plot}
-# YOUR CODE HERE
+data |> 
+  filter(departure_station == "PARIS MONTPARNASSE",
+         arrival_station == "BREST") |> 
+  ggplot(aes(x = new_date, y = total_num_trips)) +
+  geom_line() +
+  labs()
 ```
 
 📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate throughout the year:
@@ -184,7 +206,11 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r multi-line-plot}
 brittany_cities <- c("RENNES", "BREST", "QUIMPER")
 
-# YOUR CODE HERE
+data |> 
+  filter(departure_station == "PARIS MONTPARNASSE",
+         arrival_station %in% brittany_cities) |> 
+  ggplot(aes(x = new_date, y = total_num_trips, colour = arrival_station)) +
+  geom_line()
 ```
 
 -   *Why does Rennes have the most frequent service?*
@@ -204,7 +230,13 @@ brittany_cities <- c("RENNES", "BREST", "QUIMPER")
 📣 Create a bar plot to show the number of departures from Paris-Nord in 2015, by destination.
 
 ```{r bar-plot}
-# YOUR CODE HERE
+data |> 
+  filter(departure_station == "PARIS NORD",
+         year == 2015) |> 
+  group_by(arrival_station) |> 
+  summarise(n = sum(total_num_trips)) |> 
+  ggplot(aes(x = arrival_station, y = n)) +
+  geom_bar(stat = "identity")
 ```
 
 📣 Create a grouped bar plot to compare the number of departures from Paris-Nord in 2015 and 2016, by destination.
