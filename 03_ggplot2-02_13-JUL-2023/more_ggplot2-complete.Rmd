@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(RColorBrewer)
+library(ggthemes)
 ```
 
 ## ❓ Course information
@@ -156,7 +157,7 @@ bar_plot +
 
 ## 📈 Plots, plots, plots, plots, plots, plots
 
-📣 Create a box plot to show the distributions of the monthly number of trips from Paris-Gare-de-Lyon for each international destination:
+📣 Create a box plot to show the distribution of the monthly number of trips from Paris-Gare-de-Lyon for each international destination:
 
 ```{r box-plot}
 box_plot <- data |> 
@@ -186,25 +187,63 @@ violin_plot
 
 ## 🖼️ Facets
 
-📣 Use facets to...
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctutate over time. Use facets to organize multiple line plots into a panel (i.e., one plot for 2015, another for 2016, and so on):
 
 ```{r facet}
-data
+brittany_cities <- c("RENNES", "BREST", "QUIMPER")
+
+facet <- data |> 
+  filter(departure_station == "PARIS MONTPARNASSE",
+         arrival_station %in% brittany_cities) |> 
+  ggplot(aes(x = month, y = total_num_trips, color = arrival_station)) +
+  geom_line() +
+  facet_wrap(vars(year))
+
+facet
 ```
 
-## Changing the look and feel
+💡 Organizing a sequence of panels in this fashion might be an appropriate use of screen space in some cases.
 
-📣 Add text to provide additional information about the data being displayed:
+## ✏️ Changing the look and feel
 
-📣 Add direct labels to the line plot from last lesson:
-
-📣 Remove the legend from the line plot:
+📣 Add direct labels to the line plot from last lesson
 
 📣 Force the y-axis to start at 0 and add year-month labels to the x-axis
 
-📣 Change elements that are specified in `theme()`
-
 📣 Apply pre-existing themes
+
+📣 Change elements that are specified in `theme()` (e.g., remove the legend from the line plot)
+
+```{r look-and-feel}
+data |> 
+  filter(departure_station == "PARIS MONTPARNASSE",
+         arrival_station %in% brittany_cities)  |> 
+  mutate(label = if_else(date == max(date), arrival_station, NA)) |> 
+  ggplot(aes(x = date, y = total_num_trips, color = arrival_station)) +
+  geom_line() +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  scale_y_continuous(limits = c(0, 700), expand = c(0, 0)) +
+  labs(title = "Monthly number of trips from Paris to Brittany",
+       subtitle = "Jan 2015 to Nov 2018",
+       x = "",
+       y = "Monthly count") +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1),
+        legend.position = "none")
+  
+```
+
+📣 Save and apply a custom theme:
+
+```{r custom-theme}
+
+
+```
+
+## 💾 Saving our masterpieces
+
+```{r ggsave}
+
+```
 
 ## 📚 Extra resources
 

@@ -1,4 +1,4 @@
-year,month,service,departure_station,arrival_station,journey_time_avg,total_num_trips,avg_delay_all_departing,avg_delay_all_arriving,num_late_at_departure,num_arriving_late,new_date
+year,month,service,departure_station,arrival_station,journey_time_avg,total_num_trips,avg_delay_all_departing,avg_delay_all_arriving,num_late_at_departure,num_arriving_late,date
 2015,1,National,AIX EN PROVENCE TGV,PARIS LYON,182.373255814,432,2.86511627907,3.06976744186,34,37,2015-01-01
 2015,1,National,ANGERS SAINT LAUD,PARIS MONTPARNASSE,98.8571428571,435,1.75806451613,1.69585253456,42,24,2015-01-01
 2015,1,National,ANGOULEME,PARIS MONTPARNASSE,155.541916168,335,4.05688622754,4.32634730539,45,36,2015-01-01
