@@ -1,0 +1,207 @@
+---
+title: "Introduction to Data Visualization (Part 2)"
+author: "Reiko Okamoto"
+date: "2023-07-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+```
+
+*I acknowledge that I am calling in from the unceded, unsurrendered Territory of the Anishinaabe Algonquin Nation whose presence here reaches back to time immemorial.*
+
+## ❓ Course information
+
+-   *Mostly for those joining us for the first time*
+
+-   Course materials are available on [GitHub](https://github.com/yoitsjenna/nRc-WiSI)
+
+-   Lesson will be recorded and the recording will be shared on Teams
+
+-   Content will be delivered in English but participants can ask questions in the chat or by email in both official languages
+
+-   Request was submitted to Client Services Centre to make R and RStudio available on the Green zone
+
+    -   Alternatives to corporate machines: [Posit Cloud](https://posit.cloud/) or personal computer
+
+-   As always, consult your supervisor prior to using R and/or RStudio to develop data products as part of your work
+
+-   📣 indicates instructions and 💡 indicates tips
+
+## 📆 Upcoming schedule
+
+-   **Introduction to Data Wrangling** - Thursday, July 27th (12:00-13:00 ET)
+
+-   Teams meeting invite will be sent via email and posted on the R Learning Group sub-channel
+
+## ⏪ What did we discuss last time?
+
+-   [R Markdown](https://rmarkdown.rstudio.com/) is a file format for making dynamic documents that combine code, its results, and narrative text
+
+-   [ggplot2](https://ggplot2.tidyverse.org/) is a data visualization package for declaratively creating graphics
+
+-   Creating a ggplot2 object is like building a layered cake 🍰
+
+    ![](template.PNG){width="500"}
+
+-   Plot types we covered: histogram, scatter plot, line plot, bar plot
+
+## 🔮 Clarifying concepts from last time
+
+-   *What is the difference between editing in source and visual mode?*
+
+    -   In source mode, you need to "knit" each time you make a change to see what your document looks like
+
+    -   Visual mode provides a better experience when working with .md or .Rmd files because you can see changes in real-time and preview your document without re-knitting (similar to editing in Microsoft Word)
+
+    -   Visual mode supports both traditional keyboard shortcuts as well as markdown shortcuts; no need to memorize markdown syntax
+
+    -   Better experience for people who are not familiar with markdown yet or prefer not writing in markdown, but still want to use its features
+
+-   *When do we want to use the pipe?*
+
+    -   The [tidyverse style guide](Use%20%%3E%%20to%20emphasise%20a%20sequence%20of%20actions,%20rather%20than%20the%20object%20that%20the%20actions%20are%20being%20performed%20on.) suggests "[using] `%>%` to emphasize a sequence of actions, rather than the object that the actions are being performed on"
+
+    -   📣 Calculate the average height of Star Wars characters from Tatooine by species:
+
+```{r pipe-demo}
+# YOUR CODE HERE
+```
+
+-   *What are the differences between the magrittr pipe (`%>%`) and the base R pipe (`|>`)?*
+
+    -   [The magrittr and base R pipe: what's the difference? (CC241) - YouTube](https://www.youtube.com/watch?v=TmSwDAvPX2Q)
+
+    -   [Differences between the base R and magrittr pipes (tidyverse.org)](https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/)
+
+## 🍽️ Le menu du jour
+
+-   Bar plots (5 min)
+
+-   Changing colors (10 min)
+
+-   Additional plot types (10 min)
+
+-   Changing the look and feel (10 min)
+
+-   Saving our masterpieces (5 min)
+
+## 📊 Bar plots (5 min)
+
+📣 Read the data from last class:
+
+```{r import-data}
+# YOUR CODE HERE
+```
+
+💡 Each row summarizes information on trips from one station to another for a given month and year
+
+📣 Create a grouped bar plot to compare the number of departures from Paris-Nord in 2015 and 2016, by destination:
+
+```{r bar-plot}
+# YOUR CODE HERE
+```
+
+📣 Create a horizontal bar plot:
+
+```{r h-bar-plot}
+# YOUR CODE HERE
+```
+
+## 🖌️ Changing colors (10 min)
+
+📣 Change colors manually:
+
+```{r change-fill-manual}
+# YOUR CODE HERE
+```
+
+💡 Use `scale_fill_manual()` for bar, box, and violin plots; use `scale_color_manual()` for scatter and line plots. We'll use the latter function in just a bit.
+
+📣 Change colors using the [RColorBrewer](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html) package:
+
+```{r change-fill-brewer}
+# YOUR CODE HERE
+```
+
+📣 An estimated 2.6 million Canadians are colorblind. Create a colorblind-friendly plot using the RColorBrewer package:
+
+```{r change-fill-colorblind}
+# YOUR CODE HERE
+```
+
+## 📈 Plots, plots, plots, plots, plots, plots (10 min)
+
+📣 Create a box plot to show the distribution of the monthly number of trips from Paris-Gare-de-Lyon for each international destination:
+
+```{r box-plot}
+# YOUR CODE HERE
+```
+
+📣 Change one line of code to visualize the distributions using a violin plot:
+
+```{r violin-plot}
+# YOUR CODE HERE
+```
+
+> A violin plot is more informative than a plain box plot. While a box plot only shows summary statistics such as mean/median and interquartile ranges, the violin plot shows the full distribution of the data. The difference is particularly useful when the data distribution is multimodal (more than one peak).
+
+--- [Violin plot - Wikipedia](https://en.wikipedia.org/wiki/Violin_plot#:~:text=A%20violin%20plot%20is%20more,(more%20than%20one%20peak).)
+
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate over time. Use **facets** to organize multiple line plots into a panel (i.e., one plot for 2015, another for 2016, and so on):
+
+```{r facet}
+# YOUR CODE HERE
+```
+
+💡 Organizing a sequence of panels in this fashion might be an appropriate use of screen space in some cases.
+
+## ✏️ Changing the look and feel (10 min)
+
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate over time (from last class)
+
+1.  Force the y-axis to start at 0
+
+2.  Add year-month labels to the x-axis and rotate them (Google how to do this)
+
+3.  Apply [pre-existing themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+4.  Change elements that are specified by the theme (Google how to do this as well)
+
+```{r look-and-feel}
+# YOUR CODE HERE
+```
+
+💡 Modify the theme to customize the non-data components of your plots (e.g., titles, labels, grid lines). Make sure to call `theme_minimal()` before `theme()` or else the modifications you have specified will be overwritten.
+
+📣 Save and apply our custom theme:
+
+```{r apply-custom-theme}
+# YOUR CODE HERE
+```
+
+💡 A system like this allows us to reproducibly make the same changes across multiple plots with less typing!
+
+## 💾 Saving our masterpieces (5 min)
+
+```{r ggsave}
+# YOUR CODE HERE
+```
+
+💡 By default, if you don't specify the `plot` argument, the function will save the last plot displayed.
+
+## 📚 Extra resources
+
+-   ⭐[From data to Viz \| Find the graphic you need (data-to-viz.com)](https://www.data-to-viz.com/)
+
+-   ⭐[Be Awesome in ggplot2: A Practical Guide to be Highly Effective - R software and data visualization - Easy Guides - Wiki - STHDA](http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization)
+
+-   [Modify components of a theme --- theme • ggplot2 (tidyverse.org)](https://ggplot2.tidyverse.org/reference/theme.html)
+
+-   [Get, set, and modify the active theme --- theme_get • ggplot2 (tidyverse.org)](https://ggplot2.tidyverse.org/reference/theme_get.html)
+
+-   [Exploring RStudio's Visual Markdown Editor - Posit](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/)

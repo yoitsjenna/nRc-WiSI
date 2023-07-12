@@ -1,7 +1,7 @@
 ---
 title: "Introduction to Data Visualization (Part 2)"
 author: "Reiko Okamoto"
-date: "2023-07-10"
+date: "2023-07-12"
 output: html_document
 ---
 
@@ -10,8 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(RColorBrewer)
-library(ggthemes)
 ```
+
+*I acknowledge that I am calling in from the unceded, unsurrendered Territory of the Anishinaabe Algonquin Nation whose presence here reaches back to time immemorial.*
 
 ## ❓ Course information
 
@@ -39,11 +40,11 @@ library(ggthemes)
 
 ## ⏪ What did we discuss last time?
 
--   [R Markdown](https://rmarkdown.rstudio.com/) is a file format for making dynamic documents with R that combine code, its results, and narrative text
+-   [R Markdown](https://rmarkdown.rstudio.com/) is a file format for making dynamic documents that combine code, its results, and narrative text
 
 -   [ggplot2](https://ggplot2.tidyverse.org/) is a data visualization package for declaratively creating graphics
 
--   Creating a ggplot2 object is like building a layered cake 🍰, adding components with `+`
+-   Creating a ggplot2 object is like building a layered cake 🍰
 
     ![](template.PNG){width="500"}
 
@@ -55,7 +56,7 @@ library(ggthemes)
 
     -   In source mode, you need to "knit" each time you make a change to see what your document looks like
 
-    -   Visual mode provides a better experience when working with .md or .Rmd files because you can see changes in real-time and preview your document without re-knitting (more like editing in Microsoft Word)
+    -   Visual mode provides a better experience when working with .md or .Rmd files because you can see changes in real-time and preview your document without re-knitting (similar to editing in Microsoft Word)
 
     -   Visual mode supports both traditional keyboard shortcuts as well as markdown shortcuts; no need to memorize markdown syntax
 
@@ -64,6 +65,8 @@ library(ggthemes)
 -   *When do we want to use the pipe?*
 
     -   The [tidyverse style guide](Use%20%%3E%%20to%20emphasise%20a%20sequence%20of%20actions,%20rather%20than%20the%20object%20that%20the%20actions%20are%20being%20performed%20on.) suggests "[using] `%>%` to emphasize a sequence of actions, rather than the object that the actions are being performed on"
+
+    -   📣 Calculate the average height of Star Wars characters from Tatooine by species:
 
 ```{r pipe-demo}
 # with pipe
@@ -76,7 +79,7 @@ starwars |>
 summarise(group_by(filter(starwars, homeworld == "Tatooine"), species), h = mean(height))
 ```
 
--   *What are the differences between the magrittr pipe (`&>%`) and the base R pipe (`|>`)?*
+-   *What are the differences between the magrittr pipe (`%>%`) and the base R pipe (`|>`)?*
 
     -   [The magrittr and base R pipe: what's the difference? (CC241) - YouTube](https://www.youtube.com/watch?v=TmSwDAvPX2Q)
 
@@ -84,19 +87,19 @@ summarise(group_by(filter(starwars, homeworld == "Tatooine"), species), h = mean
 
 ## 🍽️ Le menu du jour
 
--   Bar plots (continued)
+-   Bar plots (5 min)
 
--   Changing colors
+-   Changing colors (10 min)
 
--   Additional plots
+-   Additional plot types (10 min)
 
--   Changing the look and feel
+-   Changing the look and feel (10 min)
 
--   Saving our masterpieces
+-   Saving our masterpieces (5 min)
 
-## 📊 Bar plots (continued)
+## 📊 Bar plots (5 min)
 
-📣 Read the data:
+📣 Read the data from last class:
 
 ```{r import-data}
 data <- readr::read_csv("french_trains.csv")
@@ -109,85 +112,87 @@ data
 📣 Create a grouped bar plot to compare the number of departures from Paris-Nord in 2015 and 2016, by destination:
 
 ```{r bar-plot}
-bar_plot <- data |> 
+bar_plt <- data |> 
   filter(departure_station == "PARIS NORD",
          year %in% c(2015, 2016)) |> 
-  mutate(year = as.character(year)) |> 
-  summarise(n = sum(total_num_trips), .by = c(year, arrival_station)) |> 
-   ggplot(aes(x = arrival_station, y = n, fill = year)) +
-   geom_bar(stat="identity", position = "dodge")
+  mutate(year = as.factor(year)) |> 
+  group_by(year, arrival_station) |> 
+  summarise(n = sum(total_num_trips), .groups = "drop") |> 
+  ggplot(aes(x = arrival_station, y = n, fill = year)) +
+  geom_bar(stat = "identity", position = "dodge") # only focus on required parts for now
 
-bar_plot
+bar_plt
 ```
 
 📣 Create a horizontal bar plot:
 
 ```{r h-bar-plot}
-h_bar_plot <- bar_plot +
+h_bar_plt <- bar_plt +
   coord_flip() # flip cartesian coordinates
 
-h_bar_plot
+h_bar_plt
 ```
 
-## 🖌️Changing colors
+## 🖌️ Changing colors (10 min)
 
 📣 Change colors manually:
 
 ```{r change-fill-manual}
-bar_plot +
-  scale_fill_manual(values=c("#651C32", "#F2827F")) # SNCF visual identity 
+bar_plt +
+  scale_fill_manual(values=c("#651C32", "#F2827F")) 
 ```
+
+💡 Use `scale_fill_manual()` for bar, box, and violin plots; use `scale_color_manual()` for scatter and line plots. We'll use the latter function in just a bit.
 
 📣 Change colors using the [RColorBrewer](https://r-graph-gallery.com/38-rcolorbrewers-palettes.html) package:
 
 ```{r change-fill-brewer}
-bar_plot +
+display.brewer.all()
+
+bar_plt +
   scale_fill_brewer(palette = "Pastel1")
 ```
 
 📣 An estimated 2.6 million Canadians are colorblind. Create a colorblind-friendly plot using the RColorBrewer package:
 
 ```{r change-fill-colorblind}
-display.brewer.all()
 display.brewer.all(colorblindFriendly = TRUE)
 
-bar_plot +
+bar_plt +
   scale_fill_brewer(palette = "Set2")
 ```
 
-## 📈 Plots, plots, plots, plots, plots, plots
+## 📈 Plots, plots, plots, plots, plots, plots (10 min)
 
 📣 Create a box plot to show the distribution of the monthly number of trips from Paris-Gare-de-Lyon for each international destination:
 
 ```{r box-plot}
-box_plot <- data |> 
+box_plt <- data |> 
   filter(departure_station == "PARIS LYON",
          service == "International") |> 
   ggplot(aes(x = arrival_station, y = total_num_trips)) +
-  geom_boxplot()
+  geom_boxplot() 
 
-box_plot
+box_plt
 ```
 
 📣 Change one line of code to visualize the distributions using a violin plot:
 
 ```{r violin-plot}
-violin_plot <- data |> 
+violin_plt <- data |> 
   filter(departure_station == "PARIS LYON",
          service == "International") |> 
   ggplot(aes(x = arrival_station, y = total_num_trips)) +
   geom_violin()
 
-violin_plot
+violin_plt
 ```
 
 > A violin plot is more informative than a plain box plot. While a box plot only shows summary statistics such as mean/median and interquartile ranges, the violin plot shows the full distribution of the data. The difference is particularly useful when the data distribution is multimodal (more than one peak).
 
 --- [Violin plot - Wikipedia](https://en.wikipedia.org/wiki/Violin_plot#:~:text=A%20violin%20plot%20is%20more,(more%20than%20one%20peak).)
 
-## 🖼️ Facets
-
-📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctutate over time. Use facets to organize multiple line plots into a panel (i.e., one plot for 2015, another for 2016, and so on):
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate over time. Use **facets** to organize multiple line plots into a panel (i.e., one plot for 2015, another for 2016, and so on):
 
 ```{r facet}
 brittany_cities <- c("RENNES", "BREST", "QUIMPER")
@@ -197,58 +202,77 @@ facet <- data |>
          arrival_station %in% brittany_cities) |> 
   ggplot(aes(x = month, y = total_num_trips, color = arrival_station)) +
   geom_line() +
-  facet_wrap(vars(year))
+ facet_wrap(vars(year))
 
 facet
 ```
 
 💡 Organizing a sequence of panels in this fashion might be an appropriate use of screen space in some cases.
 
-## ✏️ Changing the look and feel
+## ✏️ Changing the look and feel (10 min)
 
-📣 Add direct labels to the line plot from last lesson
+📣 Create a line plot to show how the monthly number of trips from Paris to multiple cities in Brittany fluctuate over time (from last class)
 
-📣 Force the y-axis to start at 0 and add year-month labels to the x-axis
+1.  Force the y-axis to start at 0
 
-📣 Apply pre-existing themes
+2.  Add year-month labels to the x-axis and rotate them (Google how to do this)
 
-📣 Change elements that are specified in `theme()` (e.g., remove the legend from the line plot)
+3.  Apply [pre-existing themes](https://ggplot2.tidyverse.org/reference/ggtheme.html)
+
+4.  Change elements that are specified by the theme (Google how to do this as well)
 
 ```{r look-and-feel}
-data |> 
+brittany_plt <- data |> 
   filter(departure_station == "PARIS MONTPARNASSE",
-         arrival_station %in% brittany_cities)  |> 
-  mutate(label = if_else(date == max(date), arrival_station, NA)) |> 
+         arrival_station %in% brittany_cities) |> 
   ggplot(aes(x = date, y = total_num_trips, color = arrival_station)) +
   geom_line() +
-  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
   scale_y_continuous(limits = c(0, 700), expand = c(0, 0)) +
-  labs(title = "Monthly number of trips from Paris to Brittany",
-       subtitle = "Jan 2015 to Nov 2018",
-       x = "",
-       y = "Monthly count") +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1),
-        legend.position = "none")
-  
+  scale_x_date(date_breaks = "4 months", date_labels = "%b %Y") +
+  scale_color_brewer(palette = "Dark2") +
+  labs(title = "Monthly number of trips from Paris to cities in Brittany",
+       y = "Monthly number of trips",
+       color = "Arrival station") +
+  theme_minimal()
+
+brittany_plt +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = rel(0.9)),
+        plot.title = element_text(hjust = 0.5))
 ```
 
-📣 Save and apply a custom theme:
+💡 Modify the theme to customize the non-data components of your plots (e.g., titles, labels, grid lines). Make sure to call `theme_minimal()` before `theme()` or else the modifications you have specified will be overwritten.
 
-```{r custom-theme}
+📣 Save and apply our custom theme:
 
+```{r apply-custom-theme}
+theme_custom <- theme(axis.title.x = element_blank(),
+                      axis.text.x = element_text(angle = 45, hjust = 1, size = rel(0.9)),
+                      plot.title = element_text(hjust = 0.5))
 
+brittany_plt <- brittany_plt + theme_custom
 ```
 
-## 💾 Saving our masterpieces
+💡 A system like this allows us to reproducibly make the same changes across multiple plots with less typing!
+
+## 💾 Saving our masterpieces (5 min)
 
 ```{r ggsave}
-
+ggsave(filename = "brittany.png", 
+       plot = brittany_plt, 
+       path = here::here("03_ggplot2-02_13-JUL-2023"))
 ```
+
+💡 By default, if you don't specify the `plot` argument, the function will save the last plot displayed.
 
 ## 📚 Extra resources
 
--   [From data to Viz \| Find the graphic you need (data-to-viz.com)](https://www.data-to-viz.com/)
+-   ⭐[From data to Viz \| Find the graphic you need (data-to-viz.com)](https://www.data-to-viz.com/)
 
--   [Be Awesome in ggplot2: A Practical Guide to be Highly Effective - R software and data visualization - Easy Guides - Wiki - STHDA](http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization)
+-   ⭐[Be Awesome in ggplot2: A Practical Guide to be Highly Effective - R software and data visualization - Easy Guides - Wiki - STHDA](http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization)
+
+-   [Modify components of a theme --- theme • ggplot2 (tidyverse.org)](https://ggplot2.tidyverse.org/reference/theme.html)
+
+-   [Get, set, and modify the active theme --- theme_get • ggplot2 (tidyverse.org)](https://ggplot2.tidyverse.org/reference/theme_get.html)
 
 -   [Exploring RStudio's Visual Markdown Editor - Posit](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/)
