@@ -72,12 +72,17 @@ R prefers to read CSV files, not regular excel files. So you will notice today, 
 - https://www.rapidtables.com/web/color/html-color-codes.html
 - https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf
 - https://r4ds.had.co.nz/data-visualisation.html
+- https://ggplot2.tidyverse.org/reference/theme.html
 - https://github.com/asteves/tayloRswift
+- https://ggplot2.tidyverse.org/reference/theme_get.html
+- http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization
+- https://www.data-to-viz.com/
 
 **Introduction to R**
 - https://cran.r-project.org/
 - https://datacarpentry.org/R-genomics/01-intro-to-R.html
 - http://www.cookbook-r.com/
+- https://posit.co/blog/exploring-rstudio-visual-markdown-editor/
 
 **Tidyverse**
 - https://www.youtube.com/watch?v=8NnKhpG4JHA
