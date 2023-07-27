@@ -1,0 +1,262 @@
+---
+title: "Data Wrangling and Tidying"
+author: "Jenna MacKinnon"
+date: "2023-07-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*I acknowledge and pay respects to the Mi'kmaq people, the original caretakers of Kjipuktuk, which is is the region I have the honour of living and working in.*
+
+## 💻 Course information
+
+-   *Mostly for those joining us for the first time*
+
+-   Course materials are available on [GitHub](https://github.com/yoitsjenna/nRc-WiSI)
+
+-   Lesson will be recorded with captions and the recording will be shared on Teams -- check the "files" tab in the group chat for the previous lessons
+
+-   Content will be delivered in English but participants can ask questions in the chat or by email in both official languages
+
+-   As always, consult your supervisor prior to using R and/or RStudio to develop data products as part of your work
+
+-   📣 indicates instructions and 💡 indicates tips
+
+## 📆 Upcoming schedule
+
+-   **To Be Determined** - We will be taking a break for the month of August for everyone to catch up on the first four lessons
+
+    -   Teams meeting invite will be sent via email and posted on the R Learning Group sub-channel when we start planning the fall lessons
+
+## 🛠️ Install and Load Packages
+
+The "tidyverse" package encompasses both dplyr and tidyr
+
+📣 Load the "tidyverse" and "RColorBrewer" packages.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RColorBrewer)
+```
+
+## 📖 Read the Data
+
+📣 Read the same French Trains dataset that we have used in the previous two lessons
+
+```{r import-data}
+
+data <- readr::read_csv("french_trains.csv")
+data
+
+view(data)
+
+```
+
+💡 The view() function opens a dataframe as a separate tab if you want another way to easily view the table.
+
+## ❔ Problem-solving from the previous lesson
+
+-   *I'm receiving an error "could not find function summarise()". How do I fix this?*
+
+    -   summarise() is a sneaky function because it is part of multiple packages, having slightly different applications in each. To specify which version of summarise() you are using, use the package name in front of the function followed by a double-colon.
+
+    -   Another issue could be with the install/loading of the "tidyverse" package
+
+```{r}
+
+  
+
+```
+
+## 🤠 Data Wrangling and Tidying
+
+Data wrangling and tidying are essential steps in data preparation and involve manipulating, transforming, and organizing data to facilitate analysis. In the context of R, data wrangling and tidying are typically achieved using packages like **`dplyr`** and **`tidyr`**.
+
+The overall goal of data wrangling and tidying in R is to prepare the data for further analysis, modeling, or visualization. By using the functions provided by these packages, you can efficiently clean, manipulate, and reshape your data, allowing you to extract meaningful insights and make informed decisions based on the data.
+
+### dplyr
+
+|                 |                                                                                                                                                               |
+|----------------|--------------------------------------------------------|
+| **filter()**    | filters certain rows based on an identified parameter; selects rows that meet specific criteria and excludes others                                           |
+| **select()**    | selects certain columns from a data frame; allows you to subset and keep only the variables of interest                                                       |
+| **mutate()**    | creates new variables or modifies existing ones based on defined calculations or transformations; adds columns with transformed or computed values            |
+| **arrange()**   | arranges rows based on one or more variables; sorts the data frame based on the specified variables in ascending or descending order                          |
+| **summarize()** | computes summary statistics or aggregations for grouped data; calculates summary measures such as mean, sum, count, etc., for specific groups                 |
+| **group_by()**  | groups the data frame by one or more variables; used in conjunction with other **`dplyr`** functions to perform operations on specific groups within the data |
+| **rename()**    | renames variables/columns in a data frame; allows you to assign new names to one or more columns.                                                             |
+
+### tidyr
+
+|                |                                                                                                                                                                                                    |
+|----------------|--------------------------------------------------------|
+| **gather()**   | converts data from wide format to long format by gathering multiple columns into key-value pairs; used when columns represent different variables, and you want to stack them into a single column |
+| **spread()**   | converts data from long format to wide format by spreading values from a single column into multiple columns; used when a single variable column needs to be transformed into separate columns     |
+| **separate()** | splits a single character column into multiple columns based on a separator; separates a column into multiple columns using a specified delimiter or pattern                                       |
+| **unite()**    | combines multiple columns into a single character column by concatenating their values; used when you want to merge two or more columns into one                                                   |
+
+💡 If you want to know more about one of the functions, use the "Help" window or try the following:
+
+```{r}
+
+
+```
+
+## 👾 Mutate()
+
+📣 Create a new column describing the **TOTAL JOURNEY TIME** for each route each month. To calculate this, multiply the average journey time by the total number of trips.
+
+```{r}
+
+
+
+```
+
+📣 Using this new variable, find the **TOTAL JOURNEY TIME** for each route over the entire time period.
+
+```{r}
+
+
+
+
+```
+
+📣 Calculate the mean and standard deviation of the average journey time for each route over the entire time period.
+
+-   In the select() function, the "-" signs in front of each column heading mean that that specific column will be excluded
+
+-   The paste() function prints the helps to combine multiple character strings into a single character string
+
+-   The round() function rounds numeric values to a specific number of decimal places
+
+```{r}
+
+
+  
+```
+
+📣 Export the table as a CSV file or as a text file.
+
+```{r}
+
+
+
+```
+
+📣 How would I calculate the standard error within summarise() for this data?
+
+```{r}
+
+
+
+```
+
+-   Reminder -- R is case-sensitive; if R is giving an error where it cannot find a certain variable/value, check to ensure you have it coded exactly as written in the file
+
+    -   You can use tolower() to make everything lowercase, or toupper() to make everything uppercase
+
+```{r}
+
+data %>% 
+    group_by(departure_station, arrival_station) %>% 
+    summarise(average_time = round(mean(journey_time_avg), 1),
+            stdev = round(sd(journey_time_avg), 1)) %>%
+    mutate(mean_sd = paste(average_time, "+/-", stdev)) %>% 
+    rename(MeanTime_StandardDeviation = mean_sd) %>%
+    arrange(average_time) %>% 
+    filter(departure_station == "Paris Lyon") # Case-sensitive!
+  
+```
+
+```{r}
+  
+
+
+```
+
+## 📊 Graphing
+
+📣 Let's use some of the graphing skills we learned in the previous lessons to graph this data!
+
+-   Add error bars using geom_errorbar() -- customize width, colour, size, etc.
+
+-   Customize colours, fonts, sizes in several aspects of the graph
+
+-   Change the format for the bar labels -- defaults to horizontal along the bottom
+
+-   margin() helps to
+
+💗🖤 "Barbenheimer" inspo for graphic colours! 🖤💗
+
+```{r}
+
+data %>% 
+    group_by(departure_station, arrival_station) %>% 
+    summarise(average_time = mean(journey_time_avg),
+            stnd_error = sd(journey_time_avg)/sqrt(n())) %>%
+    arrange(average_time) %>% 
+    filter(departure_station == "PARIS LYON") %>%
+    ggplot(aes(x = arrival_station, y = average_time))+
+      geom_bar(stat = "identity", fill = "#ffe2eb")+
+      geom_errorbar(aes(ymin = average_time - stnd_error, 
+                      ymax = average_time + stnd_error), 
+                      width = 0.2, 
+                      color = "#808080")+
+      geom_text(aes(label = arrival_station), 
+                      position = position_stack(vjust=0),
+                      hjust = -0.01,
+                      size = 3,
+                      color = "#22211d",
+                      angle = 90, 
+                      fontface = "bold", 
+                      family = "serif")+
+      xlab("Arrival Station")+
+      ylab("Average Journey Time (Minutes)")+
+      theme(text = element_text(color = "#22211d", size = 12, family = "mono"),
+        axis.line = element_blank(),
+        axis.title.x = element_text(color = "#FF1493"),
+        axis.text.x = element_blank(),
+        axis.title.y = element_text(color = "#FF1493", margin = margin(r = 10)),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.y = element_line(color = "#ebebe5", size = 0.5),
+        panel.grid.minor = element_blank(),
+        plot.background = element_blank(), 
+        panel.background = element_blank(), 
+        legend.background = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        panel.border = element_rect(fill = NA, color = "#ebebe5", size = 0.5))
+
+
+```
+
+## 👭 Unite()
+
+We have been using the station data for the French trains separated as arrival_station and departure_station. What if we wanted to combine this info to make a new column called train_route?
+
+-   **unite()** combines multiple columns into a single column; **separate()** splits a single column into multiple columns
+
+```{r}
+
+
+```
+
+```{r}
+
+
+
+```
+
+## 📄 Survey
+
+-   Help us help YOU! Please fill out [this survey](https://forms.office.com/r/xpnjH9YUKL) so we can reevaluate our lessons, teaching, and material before returning in the fall for more lessons.
+
+## 🗂️ Extra Resources
+
+-   [data-wrangling-cheatsheet (rstudio.com)](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+-   The complete list of resources from all four lessons is located in the read.me file in [github](https://github.com/yoitsjenna/nRc-WiSI)
