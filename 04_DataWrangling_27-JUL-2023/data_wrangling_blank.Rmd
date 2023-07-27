@@ -5,10 +5,6 @@ date: "2023-07-27"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 *I acknowledge and pay respects to the Mi'kmaq people, the original caretakers of Kjipuktuk, which is is the region I have the honour of living and working in.*
 
 ## 💻 Course information
